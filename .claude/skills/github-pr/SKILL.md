@@ -10,12 +10,19 @@ GitHub Pull Request 생성 워크플로우
 
 1. 현재 브랜치 및 변경사항 확인 (git status, git log)
 2. 연결할 이슈 번호 확인
-3. PR 본문 작성 (아래 템플릿 참조)
-4. `gh pr create` 실행:
+3. **타겟 브랜치 결정**:
+   - 최근 10개 PR의 base 브랜치를 조회하여 빈도순으로 추천
+     ```bash
+     gh pr list --state merged --limit 10 --json baseRefName --jq '.[].baseRefName' | sort | uniq -c | sort -rn
+     ```
+   - 가장 많이 사용된 브랜치를 기본값으로 제안
+   - **반드시 사용자에게 확인** 후 진행
+4. PR 본문 작성 (아래 템플릿 참조)
+5. `gh pr create` 실행:
    ```bash
-   gh pr create --title "타입: 제목" --body "..." --base main
+   gh pr create --title "타입: 제목" --body "..." --base {사용자 확인한 브랜치}
    ```
-5. PR URL 사용자에게 전달
+6. PR URL 사용자에게 전달
 
 ## PR 본문 템플릿
 
@@ -60,6 +67,6 @@ Closes #{이슈번호}
 ## 규칙
 
 - PR 생성은 사용자 승인 후에만
-- 기본 타겟 브랜치: `main`
+- 타겟 브랜치는 하드코딩하지 않는다 (레포마다 다를 수 있음)
 - 이슈 번호가 있으면 `Closes #N`으로 연결
 - CLAUDE.md 커밋 컨벤션과 PR 제목 형식 일치
