@@ -14,7 +14,14 @@ BASE_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
 
 # 원격 최신 버전 조회
 get_remote_version() {
-  curl -sL "${BASE_URL}/VERSION"
+  local version
+  version=$(curl -sfL "${BASE_URL}/VERSION")
+  if [ $? -ne 0 ] || [ -z "$version" ]; then
+    echo "[오류] 원격 버전을 조회할 수 없습니다 (${BASE_URL}/VERSION)" >&2
+    echo "       네트워크 연결 또는 저장소 URL을 확인하세요." >&2
+    exit 1
+  fi
+  echo "$version"
 }
 
 # 로컬 설치 버전 조회
