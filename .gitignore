@@ -5,6 +5,9 @@
 .DS_Store
 Thumbs.db
 
+# OMC 상태
+.omc/
+
 # IDE
 .idea/
 .vscode/
